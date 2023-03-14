@@ -1,0 +1,4 @@
+launch.json
+
+-> program 调试的可执行目标文件
+-> preLaunchTask 构建的语言类型 填入的值与tasks.json的tasks的label值对应

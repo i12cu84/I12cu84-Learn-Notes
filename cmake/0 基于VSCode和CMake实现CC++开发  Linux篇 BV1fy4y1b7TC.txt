@@ -1,0 +1,105 @@
+BV1fy4y1b7TC
+
+1.3.1
+显示路径
+pwd
+
+查看路径列表形式显示
+ls -lah 
+
+3.1
+预处理 编译(产生汇编语言文件) 汇编(机器语言) 链接(可执行文件)
+g++ -E text.cpp -o text.i
+g++ -S test.i -o test.s
+g++ -c test.s -o test.o
+g++ test.o -o test
+四合一
+g++ text.cpp -o test 
+
+3.2 
+编译带调试信息的可执行文件
+g++ -g test.cpp
+优化代码
+g++ -O2 test.cpp
+测时间
+time ./exe
+指定库文件(路径
+g++ -L/filelocal -libname test.cpp
+指定头文件搜索目录
+g++ -I/libname test.cpp
+打印警告信息
+g++ -Wall test.cpp
+关闭警告信息
+g++ -w test.cpp
+设置编译标准
+g++ -std=c++11 test.cpp
+指定输出文件名字
+g++ test.cpp -o test
+定义宏
+-D
+
+3.3
+链接静态库生成可执行文件
+g++ swap.cpp -c -I../include
+ar rs libswap.a swap.o
+g++ main.cpp -lswap -Lsrc -Iinclude -o static_main
+链接动态库生成可执行文件
+g++ swap.cpp -I../include -fPIC -shared -o libSwap.so
+..(回上级
+g++ main.cpp -Iinclude -lswap -Lsrc -o dyna_main
+静态库(链路库以封装入,而动态库在运行时才链接)
+静态库直接运行 而动态库 需要以下
+LD_LIBRARY_PATH=src ./dyna_main
+
+4.1
+GDB调试器
+help/h 查询
+run/r 重新开始运行文件
+start 单步执行
+list/l 查看源代码
+set 设置变量的值
+next/n 单步调试(逐过程
+step/s 单步调试(逐语句
+backtrace/bt 查看函数的调用栈帧和层级关系
+frame/f 切换函数栈帧
+info/i 查看函数内部局部变量的数值
+finishi 结束当前函数
+continue/c 继续运行
+print/p 打印值
+quit/q 退出
+
+break+num/b 在第num行设置断点
+info breakpoints 查看当前设置的所有断点
+delete breakpoints num/d 删除第num个断点
+display 追踪查看具体变量值
+undisplay 取消追踪观察变量
+watch 被设置观察点的变量发生修改时打印显示
+i watch 显示观察点
+enable breakpoints 启用断点
+disable breakpoints 禁用断点
+x 查看内存
+run argv[1] argv[2] 调试时命令行传参
+set follow-fork-mode child 选择跟踪父子程序fork()
+tips:编译时要加上"-g" 之后才能gdb调试
+
+vim 指令
+:q 退出
+:qw 保存退出
+:set nu 显示行号
+
+6.5
+//CMakelists vsc的插件有自动不全
+设置最低版本要求设置
+cmake_minnum_required(VERSION 3.0)
+//项目名称
+project(name)
+//等价于 g++ name.cpp -o name_cmake
+add_executable(name_cmake name.cpp)
+// -Iinclude等价配置路径
+include_directories(include)
+//设置配置追加选项 GDB调试 O2优化 警告提示
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall")
+//生成调试配置文件
+set(CMAKE_BUILD_TYPE Debug)
+//配置时 cmake终端输入 即可
+make

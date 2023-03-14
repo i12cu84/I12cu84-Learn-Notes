@@ -1,0 +1,24 @@
+在git中设定账号
+git config --global user.name "yullion"
+git config --global user.email "2907586864@qq.com"
+
+检查ssh key存在
+cd ~/.ssh
+ls
+-> id_rsa.pub就是公钥
+
+电脑user路径ssh key生成
+ssh-keygen -t rsa -C "2907586864@qq.com”
+生成ssh key 在user\.ssh找到公钥id_rsa.pub文件复制到github
+
+git init //把这个目录变成Git可以管理的仓库
+　　git add README.md //文件添加到仓库
+　　git add . //不但可以跟单一文件，还可以跟通配符，更可以跟目录。一个点就把当前目录下所有未追踪的文件全部add了 
+　　git commit -m "first commit" //把文件提交到仓库
+　　git remote add origin git@github.com:wangjiax9/practice.git //关联远程仓库
+　　git push -u origin master //把本地库的所有内容推送到远程库上 
+
+更换远程库
+git remote rm origin //删除关联远程库
+git remote add origin URL//设定自己仓库路径
+git push origin master //上传

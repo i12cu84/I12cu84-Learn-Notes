@@ -1,0 +1,8 @@
+git remote add origin 网址	//添加远程库
+git remote -v		//查询远程库
+
+git add . 			//加入暂存区
+git status 			//cha
+git commit -m "注解"	//提交
+git push			//提交到远程
+git clone 网址		//获得网上代码

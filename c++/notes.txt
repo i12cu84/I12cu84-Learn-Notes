@@ -1,0 +1,269 @@
+template<tempname T,typename ... Args>
+inlint T& Fun(Args && ... p_args)
+{
+
+}
+// ... 表示复用多个形参
+// Fun<T>(Args); -> T表示模板类类型,定义函数和使用函数时会对函数定型
+// .inl -> inline 内联函数文件
+
+_CrtDbgBreak();
+
+注解标签(Attributes)
+[[noreturn]] 			                没有返回值
+[[deprecated("warning this fun ...")]] 	该函数过时
+[[fallthrough]]			                switch中没用break有意为之提示
+[[nodiscard]]			                必须将返回赋值给一个变量
+[[maybe_unused]]			            变量可能会没被用到
+[[suppress(types)]] 			        封锁..类型		
+
+#include <type_traits>
+std::is_convertible 检查是否可以将任何数据类型A隐式转换为任何数据类型B
+
+any_cast 对所含有对象的类型安全访问
+
+rope 可持久化平衡树
+
+std::any 		        代替c void*
+std::optional 	        代替C类型指针
+std::function 	        代替C函数指针
+std::variant 	        代替uniton
+std::atomic	            原子类型
+std::mutex		        互斥锁
+std::thread	            多线程..主程才能使用GL内容 导致使用GL只可用协程
+    .detach()               可以让线程对线与线程函数脱离关系
+std::lock_guard         锁管理器(创建即加锁,不能中途解锁,析构解锁,不能复制)
+std::unique_lock        锁管理器(可以随时加锁解锁,创建可不锁,析构解锁,不可辅助可移动)(条件变量需要该类型的锁作为参数(?)(必用此))
+gsl::joining_thread     联结线程
+std::async              同步(产生并发任务)
+std::accumulate         额外累加前条件
+std::future             获取异步任务结果(shared_future)
+std::promise            并发
+
+decltype 关键字 自动推导类型
+
+using a=b 指定别名
+
+std::dynamic_pointer_cast<T>(*?) 返回一个正确类型的副本 尖括号用于定义模板类型
+
+<iosfwd> 标准输入/输出库的类型提供前向声明
+<function> 函数对象类模板 https://blog.csdn.net/fengbingchun/article/details/78006735
+
+virtual		继承接口和默认实现
+non-virtual	继承接口和强制实现(不该重写)
+pure virtual	只继承接口
+
+explicit声明的构造函数不能在隐式转换中使用,用以避免意外的类型转换
+
+RAII机制 资源申请释放成对操作的封装 实现在局部作用域内申请资源然后销毁资源
+
+浅拷贝 引用(地址同前)(共享)
+深拷贝 重新复制一份到内存(不共享)
+
+for_each(start,end,lambda)
+
+Ensures() 后置条件
+expects()/assert() 先决条件
+用 GSL 的 `Expects` 和 `Ensures`（直到对契约的语言支持可以使用）代替抛出异常(低效)
+static_assert(真)   静态断言(无事发生)
+abort()             跳出
+quick_exit()        跳出
+valid()             有效的(未知使用方式)
+
+std::tie(A,B,..) 变量的引用整合成tuple(批量赋值
+
+not_null<> 不能为空的类型数组
+zstring 以0结尾的字符串数组
+string_view 高效安全地管理字符型数组 数组不要求以0结尾
+not_null 表示!nullptr
+
+merge() 以拷贝实现合并
+
+如果函数可能必须在编译期进行求值，就将其声明为 constexpr
+如果函数非常小，并且是时间敏感的，就将其声明为 inline
+如果函数必然不会抛出异常，就将其声明为 noexcept(无例外,不能出错) (C++隐含做了这件事)(析构函数，回收，移动以及 `swap` 不允许失败)
+explict相反(阻止隐式转换发生
+
+对带有指向非 const 的引用参数但又不向其进行写入的函数给出警告。
+当按引用传递的非 const 参数被进行 move 时给出引用
+
+对于“将被移动（will-move-from）”参数，按 X&& 进行传递并对参数 std::move
+move将对象的状态或者所有权从一个对象转移到另一个对象，只是转移，没有内存的搬迁或者内存拷贝。
+
+tuple<int,string> (元组)
+make_tuple(A,B);
+
+lambda改变捕获参量 mutable->T
+
+span<T>/span_p<T>代表一个半开序列
+zstring/nul_null<zstring>代表C风格字符串
+
+T&& 右值引用/引用折叠 原封不动左右值传递(完美转发 std::forward
+
+lambda优先使用按引用捕获(非局部使用避免引用捕获
+
+template<class ...Args>
+auto sum(Args... args) // 好，而且更灵活
+{
+    return (... + args); // 注意：C++17 的“折叠表达式”
+}
+
+=default(显示声明函数自动生成函数体,提高执行效率)用法
+class X {
+public:
+    X() = default; // inline
+    X(const X&); // 
+    X& operator = (const X&);
+    ~X() = default; // inline
+}
+X::X(const X&) = default; // out of line
+X& X::operator = (const X&) = default; // out of line
+
+=delete(显示的禁用)用法
+
+三五法则
+1、需要析构函数的类也需要拷贝构造函数和拷贝赋值函数。 
+2、需要拷贝操作的类也需要赋值操作，反之亦然。
+3、析构函数不能是删除的
+4、如果一个类成员有删除的或不可访问的析构函数，那么其默认和拷贝构造函数会被定义为删除的。
+5、如果一个类有const或引用成员，则不能使用合成的拷贝赋值操作。（无法默认构造的const成员的类 则该类就无默认构造函数）
+
+零法则
+类不应定义任何特殊函数（复制/移动构造函数/赋值和析构函数），除非它们是专用于资源管理的类
+
+class Foo {
+public:
+    Foo& operator=(const Foo& x)
+    {
+        // 好: 不需要检查自赋值的情况（除非为性能考虑）
+        auto tmp = x;
+        swap(tmp); // 参见 C.83
+        return *this;
+    }
+    // ...
+};
+Foo a;
+Foo b;
+Foo f();
+a = b;    // 用左值赋值：复制
+a = f();  // 用右值赋值：可能进行移动
+
+chrono 微基准测量
+
+union 中 定义其中一个变量 其他变量将失效(成员共享内存,但只包含其中一个成员 注意字节对齐)
+
+varint<>
+
+栈上数组
+array<type,n> name;
+stack_array<type> name(n);
+
+static_cast
+const_cast
+reinterpret_cast
+dynamic_cast
+std::move // move(x) 是指代 x 的右值引用
+std::forward // forward<T>(x) 是指代 x 的左值或右值引用（取决于 T）
+gsl::narrow_cast // narrow_cast<T>(x) 就是 static_cast<T>(x)
+gsl::narrow // narrow<T>(x) 在当 static_cast<T>(x) == x 时即为 static_cast<T>(x) 否则会抛出 narrowing_error
+
+gsl::index 标准库无符号数下标类型
+
+volatile 意想不到数值修改关键字
+
+
+可以使用 C++17 的 `std::string_view` 或 `gsl::span<char>` 代替这些 `const char*`
+
+virtual(新的虚函数)/override(非最终覆盖函数)/final(最终覆盖函数)
+
+explicit 隐式类型转换 (构造函数的隐式调用).
+指定构造函数或转换函数 (C++11起)为显式, 即它不能用于隐式转换和复制初始化.explicit 
+指定符可以与常量表达式一同使用. 函数若且唯若该常量表达式求值为 true 才为显式. (C++20起)
+
+type& name=leftval;
+type&& name=rightval;
+
+引用对象不能为空
+
+std::observer_ptr 基本相同.不同的是owner存储一个指针并“拥有”它
+
+* `static_cast`
+* `const_cast`
+* `reinterpret_cast`
+* `dynamic_cast`
+* `std::move`         // `move(x)` 是指代 `x` 的右值引用
+* `std::forward`      // `forward<T>(x)` 是指代 `x` 的左值或右值引用（取决于 `T`）
+* `gsl::narrow_cast`  // `narrow_cast<T>(x)` 就是 `static_cast<T>(x)`
+* `gsl::narrow`       // `narrow<T>(x)` 在当 `static_cast<T>(x) == x` 时即为 `static_cast<T>(x)` 否则会抛出 `narrowing_error`
+
+requires 还可以接一个表达式,该表达式也是一个 纯右值表达式,
+表达式为 true 时满足约束条件, false 则不满足约束条件 
+requires 表达式的判定标准:对 requires 表达式进行模板实参的替换,如果替换之后出现无效类型,
+或者违反约束条件,则值为 false,反之为 true
+
+类型安全性剖面配置概览：
+Type.1: 避免强制转换：
+请勿使用 reinterpret_cast；此为避免强制转换和优先使用具名的强制转换的严格的版本。
+请勿在算术类型上使用 static_cast；此为避免强制转换和优先使用具名的强制转换的严格的版本。
+当源指针类型和目标类型相同时，请勿进行指针强制转换；此为避免强制转换的严格的版本。
+当指针转换可以隐式转换时，请勿使用指针强制转换；此为避免强制转换的严格的版本。
+Type.2: 请勿使用 static_cast 进行向下强制转换：
+代之以使用 dynamic_cast。
+Type.3: 请勿使用 const_cast 强制掉 const（亦即不要这样做）：
+不要强制掉 const。
+Type.4: 请勿使用 C 风格的强制转换 (T)expression 和函数式风格强制转换 T(expression)：
+优先使用构造语法，具名的强制转换，或 T{expression}。
+Type.5: 请勿在初始化之前使用变量：
+坚持进行初始化。
+Type.6: 坚持初始化成员变量：
+坚持进行初始化，
+可以采用默认构造函数或者
+默认成员初始化式。
+Type.7: 避免裸 union：
+代之以使用 variant。
+Type.8: 避免 varargs：
+不要使用 va_arg 参数。
+
+vector/deque/string         最好的方法erase-remove用法 删除指定
+list                        list::remove
+map/set/multiset/multimap   move用法 清除指定
+
+const char* t=R"()";    转移字符免\n
+
+profiler分析程序性能
+
+decltype(type)::enumtype
+
+move            将左值引用转换为右值引用
+remove          (remove后要erase)
+remove_if
+
+size        元素个数
+capacity    可容纳元素个数
+
+resize      改变到包含n个元素的状态(析构多余,更大重新分配内存)
+reserve     强迫容器容量变为至少n(已知容量使用)
+
+push_back                   末尾添加元素
+insert(begin(),val)         某位置添加元素
+
+reserve_iterator() ri.base() 插入等价,删除不等价 v.erase((++ri).base)
+
+vector/string/deque排序
+sort/stable_sort            完全排序
+partial_sort                对等价性最前面前n排序
+nth_element                 找到第n最
+partitionj/stable_partition 特定区间分开
+list排序
+sort/stablesort
+
+进行区间统计
+accumulate(begin,end,初始值)/(初始值,统计函数)
+for_each(区间,函数对象)
+
+count
+find
+binarysearch
+lowerbound
+upperbound
+equalrange

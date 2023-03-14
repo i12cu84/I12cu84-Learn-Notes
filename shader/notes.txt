@@ -1,0 +1,18 @@
+VAO 顶点属性
+VBO 顶点本身
+
+vs VertexShader
+输入输出 顶点坐标
+
+tess controller shader/hull shader
+输入多个顶点集合 坐标颜色 纹理
+
+tess evaluation shader/domain shader
+输入输出一系列顶点 (输入必须存有 layout(triangles,fractional_odd_spacing,ccw) in;
+
+geometry shader
+输入输出图元
+
+fragment shader/pixel shader
+基础形状
+

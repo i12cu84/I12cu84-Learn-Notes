@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# Chru-Learn-Notes
-that's my (Chru) all learn notes
-=======
 # Note
 
 #### 介绍
@@ -186,4 +182,3 @@ that's my (Chru) all learn notes
 ​	**unity project**:unity项目
 
 ​	**unreal engine project**:ue4项目及蓝图
->>>>>>> f98cab1 (test)
